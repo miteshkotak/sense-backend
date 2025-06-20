@@ -3,6 +3,29 @@
 This repository contains the implementation of a **Vehicle & Task Management System** that enables operators to manage vehicles, assign tasks, and monitor Points of Interest (POIs) via a web interface.  
 It integrates a backend service, real-time updates through Redis and WebSockets, and an AI-powered task planner.
 
+
+
+[![Node.js](https://img.shields.io/badge/Node.js-18.x-green?style=flat&logo=node.js)](https://nodejs.org/) 
+[![Express.js](https://img.shields.io/badge/Express-4.x-blue?style=flat)](https://expressjs.com/) 
+[![Supabase](https://img.shields.io/badge/Supabase-Postgres-blue?style=flat&logo=supabase)](https://supabase.com/) 
+[![Redis](https://img.shields.io/badge/Redis-Cache-red?style=flat&logo=redis)](https://redis.io/) 
+[![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+
+---
+
+> 📦 **Manage Vehicles, Assign Tasks, and Fetch Zone Information — Powered by AI-based Task Planning.**
+
+---
+
+## 📖 Table of Contents
+- [✨ Application Overview](#-application-overview)
+- [🎯 Functional Requirements](#-functional-requirements)
+- [⚙️ Non-Functional Requirements](#️-non-functional-requirements)
+- [🌐 API Endpoints](#-api-endpoints)
+- [🤝 Assumptions](#-assumptions)
+- [🧠 Database Structure](#-database-structure)
+- [⚙️ How to Run](#️-how-to-run)
+
 ---
 
 ## ✨ Application Overview
