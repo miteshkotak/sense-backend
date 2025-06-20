@@ -1,131 +1,133 @@
+# Vehicle & Task Management System 🛠️
 
-####Part A
+This repository contains the implementation of a **Vehicle & Task Management System** that enables operators to manage vehicles, assign tasks, and monitor Points of Interest (POIs) via a web interface.  
+It integrates a backend service, real-time updates through Redis and WebSockets, and an AI-powered task planner.
 
-##Left Screen View 
+---
 
-- Number of Vehicle 
-- Poing of Interests (POI's)
-- Scene 
+## ✨ Application Overview
 
+### 🖥️ Part A — UI Views
 
-## Right Screen View
-- Selected Vehicle Details
-    -- Size of the vehicle 
-    -- Load carrying capacity
-    -- Fuel indicator 
-    -- Function of the Vehcile 
-    -- Vehicle ID 
-    -- Vehicle Status 
-    --location. lat,log
+#### Left Screen View:
+- 📍 Number of Vehicles
+- 🗺️ Points of Interests (POIs)
+- 🎬 Scene Overview
 
+#### Right Screen View:
+- 📄 Selected Vehicle Details:
+  - 🚚 Size of Vehicle
+  - ⚖️ Load Carrying Capacity
+  - ⛽ Fuel Indicator
+  - 🛠️ Vehicle Function
+  - 🆔 Vehicle ID
+  - 📡 Vehicle Status
+  - 📍 Location (Latitude, Longitude)
 
-#### Part B
+---
 
-##NLP/command planner  tals
+### 🤖 Part B — AI-Based Task Planner
+#### NLP/Command Planner:
+- Operators can specify a task in natural language.
+- AI-based planner breaks the request into actionable steps.
+- Operator can **Approve** or **Decline** the plan.
+- Planner can access the selected vehicle's properties.
 
-## AI based Task Planner
-    -- Operator specify the task and as planner to prepare a Plan
-    -- Approve -> sent a plan or Decline the plan 
-    -- Planner should have access to Selected vehicle's property
+---
 
+## 🎯 Functional Requirements
+- 📡 View/Get real-time status and information of:
+  - Vehicles (e.g. Truck A, B, C, D)
+  - Points of Interest / Zones (e.g. Zone A, B, C)
+- 🧠 Convert natural language instructions into a list of structured tasks:
+  - `MOVE` (Source → Destination)
+  - `LOAD` (Source Zone with Material)
+  - `UNLOAD` (Destination)
+  - `REPEAT` if multiple trips required
+- 🤖 Task planner must access the selected vehicle's properties before generating a plan.
 
+---
 
+## ⚙️ Non-Functional Requirements
+- 📈 Scalable for high traffic with many concurrent users
+- ⚡ Real-time updates on vehicle and zone status
+- 🔄 Redis for caching frequently accessed data
+- 📡 WebSocket connections to IoT devices on trucks
+- 🧑‍💻 Backend service scaled to multiple servers for high availability
 
+---
 
-###Functional Requirements
--View/GET the vehicle status/information  (e.g. Truck A, B, C, D)
--View POI's , location ( e.g. Zone A, B, C)
--Convert Instruction to list of individual Tasks
-    -list set of task
-        -MOVE (source -> destination)
-        -LOAD (source zone ( Material))
-        -UNLOAD (destination)
-        -Repeat
+## 🌐 API Endpoints
 
--Task planner to get selected vehicle's information       
+#### 💼 Task Endpoints
+| Method | Endpoint              | Description                 |
+|--------|------------------------|-----------------------------|
+| POST   | `/taskPlannerAgent`    | AI-based task planning      |
+| POST   | `/task/post`           | Publish finalized task      |
 
+#### 🚚 Select Entity Endpoints
+| Method | Endpoint                  | Description               |
+|--------|----------------------------|---------------------------|
+| POST   | `/task/setSelectedVehicle` | Set the current vehicle   |
 
-###Non Functional Requirements
-- High traffic or too many usuers using
-- Realtime status update of vehicle and zone information
+#### 🗄️ Data Endpoints
+| Method | Endpoint             | Description                |
+|--------|------------------------|----------------------------|
+| GET    | `/vehicle/info`       | Get vehicle by ID         |
+| GET    | `/allVehicle/info`    | Get all vehicles          |
+| GET    | `/zone/info`          | Get zone by ID            |
+| GET    | `/allzone/info`       | Get all zones             |
 
+---
 
+## 🤝 Assumptions
+- Operators may not describe tasks perfectly — the AI agent will:
+  - Clarify unclear requirements
+  - Fetch up-to-date information using tools
+  - Self-prompt to improve its response
 
+---
 
+## 🧠 Database Structure
 
-###API Endpoints####### 
+#### 🛻 Vehicles
+| Field         | Type             | Description                  |
+|---------------|------------------|------------------------------|
+| ID            | string           | Unique vehicle ID           |
+| Capacity      | number           | Capacity in tons            |
+| Fuel_Status   | number (1-100)   | Fuel level (%)               |
+| Type          | string           | Loader, Crusher, etc.       |
+| Status        | string           | Moving, Loading, Idle, etc. |
+| Location      | string[]         | Latitude, Longitude         |
 
-//Task endpoints
-router.post('/taskPlannerAgent', taskPlanningAgent)
-router.post('/task/post', publishTask)
+#### 🧭 Points of Interest (POIs)
+| Field         | Type             | Description                  |
+|---------------|------------------|------------------------------|
+| ID            | string           | Unique POI ID               |
+| Material      | string           | e.g. zinc, iron, ore, waste |
+| Location      | string[]         | Latitude, Longitude         |
 
-//select entity endpoints
-router.post('/task/setSelectedVehicle', setSelectedVehicle)
+---
 
+## ⚙️ How to Run
 
-//DB info endpoints
-router.get('/vehicle/info', vehicleInfoById)
-router.get('/allVehicle/info', allVehicleInfo)
-router.get('/zone/info', zoneInfoById)
-router.get('/allzone/info', allZoneInfo)
-
-
-
-
-
-##Assumption
--- Assuming the operator won't be able define a task properly so a Re Act agent will be useful in this case it provide reasoning before each step, use  tools to fetch information and continously self prompt, to improve the response in proper steps 
-
-
-###Database
-Vehicle
-    -- ID: String = 'randomString'
-    -- Capacity: number - 100 tons
-    -- Fuel_Status: number = 1-100
-    -- Type: String =  Loader, Crusher
-    -- Status: string =  Moving, Loading, Idle, Stalled (  status usuful only for realtime information storage)
-    -- Location: string[] = Latitude,longitude
-
-POI'S
-    -- ID: string = 'randomString'
-    -- Material: string = zinc (Material A), iron (Material B), ore (Material C), waste (Material D)
-    -- Location: string[] = Latitude, Longitude
-
-
-
-
-
-### How to run 
-    - Requires account within Supabase  
-    - Creat .env variable file, with following key and values
-        -OPENAI_API_KEY
-        -DATABASE_URL (from Supabase, replace username, password )
-
-    - RUN "npm i"
-    - RUN "npm run db:migrate" 
-    - RUN "npm run db:seed"      
-    - RUN "npm run dev"
-
-
-
-
-
-
-
-
-
-
+1. 🧰 Requires a **Supabase** account.
+2. ✍️ Create a `.env` file with:
+   ```env
+   OPENAI_API_KEY=<your_openai_api_key>
+   DATABASE_URL=<your_supabase_database_url>
 
 ######Misscellineous 
 
+3.	📦 Install dependencies:
+npm i
 
-//Prepare for technical Architecture 
--  what could be the scaling of this ??
-- CAP ( consistant, available, fault tolerance) CA, CP, AP??
+4.	🗄️ Set up database:    
+
+npm run db:migrate
+npm run db:seed
 
 
--- Supabase Credentials
+5.	▶️ Start the development server:
 
-Project: sensmore
-pass:H!VtyC7V?c*XqYx
-
+npm run dev
